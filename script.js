@@ -14,18 +14,16 @@ function loadCounts() {
   const attendeeCount = document.getElementById("attendeeCount");
   attendeeCount.textContent = count;
 
+  // Set team counts to 0 if not in localStorage
   const waterCount = localStorage.getItem("waterCount");
-  if (waterCount !== null) {
-    document.getElementById("waterCount").textContent = waterCount;
-  }
+  document.getElementById("waterCount").textContent =
+    waterCount !== null ? waterCount : "0";
   const zeroCount = localStorage.getItem("zeroCount");
-  if (zeroCount !== null) {
-    document.getElementById("zeroCount").textContent = zeroCount;
-  }
+  document.getElementById("zeroCount").textContent =
+    zeroCount !== null ? zeroCount : "0";
   const powerCount = localStorage.getItem("powerCount");
-  if (powerCount !== null) {
-    document.getElementById("powerCount").textContent = powerCount;
-  }
+  document.getElementById("powerCount").textContent =
+    powerCount !== null ? powerCount : "0";
 
   updateProgressBar();
 }
@@ -44,6 +42,25 @@ function loadAttendeeList() {
   if (savedList) {
     const attendees = JSON.parse(savedList);
     for (let i = 0; i < attendees.length; i++) {
+      let emoji = "🧑‍💼";
+      // Simple check for common female names
+      const femaleNames = [
+        "Alice",
+        "Carol",
+        "Emma",
+        "Olivia",
+        "Sophia",
+        "Ava",
+        "Mia",
+        "Isabella",
+        "Charlotte",
+        "Amelia",
+      ];
+      // Compare case-insensitive
+      if (femaleNames.includes(attendees[i].name.trim().split(" ")[0])) {
+        emoji = "👩‍💼";
+      }
+
       const card = document.createElement("div");
       card.style.border = "1px solid #ccc";
       card.style.borderRadius = "8px";
@@ -54,14 +71,14 @@ function loadAttendeeList() {
       card.style.alignItems = "center";
       card.style.gap = "10px";
 
-      const emoji = document.createElement("span");
-      emoji.textContent = "🧑‍💼";
-      emoji.style.fontSize = "1.5em";
+      const emojiSpan = document.createElement("span");
+      emojiSpan.textContent = emoji;
+      emojiSpan.style.fontSize = "1.5em";
 
       const info = document.createElement("span");
       info.textContent = `${attendees[i].name} (${attendees[i].teamName})`;
 
-      card.appendChild(emoji);
+      card.appendChild(emojiSpan);
       card.appendChild(info);
 
       attendeeList.appendChild(card);
@@ -90,13 +107,54 @@ function saveAttendeeList(attendees) {
   localStorage.setItem("attendeeList", JSON.stringify(attendees));
 }
 
+function highlightWinnerIfGoalReached() {
+  const greeting = document.getElementById("greetingMessage");
+  // Remove outline from all teams
+  document.querySelector(".team-card.water").style.outline = "";
+  document.querySelector(".team-card.zero").style.outline = "";
+  document.querySelector(".team-card.power").style.outline = "";
+
+  if (count >= maxCount) {
+    greeting.style.display = "block";
+    greeting.textContent = "🎊 Attendance goal reached! 🎊";
+    // Find the winning team
+    const waterCount = parseInt(
+      document.getElementById("waterCount").textContent
+    );
+    const zeroCount = parseInt(
+      document.getElementById("zeroCount").textContent
+    );
+    const powerCount = parseInt(
+      document.getElementById("powerCount").textContent
+    );
+
+    let maxTeam = "water";
+    let maxValue = waterCount;
+    if (zeroCount > maxValue) {
+      maxTeam = "zero";
+      maxValue = zeroCount;
+    }
+    if (powerCount > maxValue) {
+      maxTeam = "power";
+      maxValue = powerCount;
+    }
+
+    // Outline the winning team card
+    document.querySelector(".team-card." + maxTeam).style.outline =
+      "4px solid #ffd700";
+  } else {
+    greeting.style.display = "none";
+  }
+}
+
 window.addEventListener("DOMContentLoaded", function () {
   loadCounts();
   loadAttendeeList();
+  highlightWinnerIfGoalReached();
 });
 
 form.addEventListener("submit", function (event) {
-  event.preventDefault();
+  event.preventDefault(); // Prevent page refresh and URL change
 
   const name = nameInput.value;
   const team = teamSelect.value;
@@ -135,44 +193,14 @@ form.addEventListener("submit", function (event) {
   // Update attendee list on page
   loadAttendeeList();
 
-  // Show greeting message
+  // Show greeting message for check-in
   const greeting = document.getElementById("greetingMessage");
-  greeting.textContent = `🎉 Welcome, ${name} from ${teamName}!`;
+  if (count < maxCount) {
+    greeting.style.display = "none";
+  }
 
   // Check if attendance goal is reached
-  if (count >= maxCount) {
-    greeting.textContent = "🎊 Attendance goal reached! 🎊";
-    // Find the winning team
-    const waterCount = parseInt(
-      document.getElementById("waterCount").textContent
-    );
-    const zeroCount = parseInt(
-      document.getElementById("zeroCount").textContent
-    );
-    const powerCount = parseInt(
-      document.getElementById("powerCount").textContent
-    );
-
-    let maxTeam = "water";
-    let maxValue = waterCount;
-    if (zeroCount > maxValue) {
-      maxTeam = "zero";
-      maxValue = zeroCount;
-    }
-    if (powerCount > maxValue) {
-      maxTeam = "power";
-      maxValue = powerCount;
-    }
-
-    // Remove highlight from all teams
-    document.getElementById("waterCount").parentElement.style.background = "";
-    document.getElementById("zeroCount").parentElement.style.background = "";
-    document.getElementById("powerCount").parentElement.style.background = "";
-
-    // Highlight the winning team
-    document.getElementById(maxTeam + "Count").parentElement.style.background =
-      "#ffd700"; // gold
-  }
+  highlightWinnerIfGoalReached();
 
   form.reset();
 });

@@ -28,72 +28,26 @@
     <div class="attendance-tracker">
       <div class="attendance-header">
         <i class="fas fa-users"></i>
-        Attendance: <span id="attendeeCount">50</span>/50
+        Attendance: <span id="attendeeCount">0</span>/50
       </div>
       <div class="progress-container">
-        <div id="progressBar" class="progress-bar" style="width: 100%">
-          100 %
+        <div id="progressBar" class="progress-bar" style="width: 0%">
+          0 %
         </div>
       </div>
       <!-- Add attendee list below progress bar -->
       <h3>Attendee List</h3>
       <ul id="attendeeList">
-        <div
-          style="
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 8px;
-            background: #f9f9f9;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-          "
-        >
-          <span style="font-size: 1.5em">🧑‍💼</span>
-          <span>Alice (Team Water Wise)</span>
-        </div>
-        <div
-          style="
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 8px;
-            background: #f9f9f9;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-          "
-        >
-          <span style="font-size: 1.5em">🧑‍💼</span>
-          <span>Bob (Team Net Zero)</span>
-        </div>
-        <div
-          style="
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 8px;
-            background: #f9f9f9;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-          "
-        >
-          <span style="font-size: 1.5em">🧑‍💼</span>
-          <span>Carol (Team Renewables)</span>
-        </div>
-        <!-- ...add more sample attendees as desired... -->
+        <!-- Attendees will be added here by JavaScript -->
       </ul>
     </div>
     <div class="container">
       <!-- Feedback message -->
       <p id="greeting"></p>
-      <div id="greetingMessage">🎊 Attendance goal reached! 🎊</div>
+      <div id="greetingMessage" style="display: none;">🎊 Attendance goal reached! 🎊</div>
 
       <!-- Check-in form -->
       <form class="check-in" id="checkInForm">
-        <div id="greetingMessage"></div>
         <label for="attendeeName" class="form-label">Attendee Check-In</label>
         <div class="form-group">
           <div class="input-wrapper">
@@ -123,17 +77,15 @@
         <div class="teams-grid">
           <div class="team-card water">
             <span class="team-name">🌊 Team Water Wise</span>
-            <span class="team-count" id="waterCount" style="background: #ffd700"
-              >20</span
-            >
+            <span class="team-count" id="waterCount">0</span>
           </div>
           <div class="team-card zero">
             <span class="team-name">🌿 Team Net Zero</span>
-            <span class="team-count" id="zeroCount">15</span>
+            <span class="team-count" id="zeroCount">0</span>
           </div>
           <div class="team-card power">
             <span class="team-name">⚡ Team Renewables</span>
-            <span class="team-count" id="powerCount">15</span>
+            <span class="team-count" id="powerCount">0</span>
           </div>
         </div>
       </div>
@@ -150,4 +102,52 @@
 
     <script src="script.js"></script>
   </body>
+</html>
+</html>
+</html>
+</html>
+              <option value="zero">Team Net Zero</option>
+              <option value="power">Team Renewables</option>
+            </select>
+          </div>
+          <button type="submit" id="checkInBtn">
+            <i class="fas fa-user-check"></i> Check In
+          </button>
+        </div>
+      </form>
+
+      <!-- Team stats -->
+      <div class="team-stats">
+        <h3>Team Attendance</h3>
+        <div class="teams-grid">
+          <div class="team-card water">
+            <span class="team-name">🌊 Team Water Wise</span>
+            <span class="team-count" id="waterCount">0</span>
+          </div>
+          <div class="team-card zero">
+            <span class="team-name">🌿 Team Net Zero</span>
+            <span class="team-count" id="zeroCount">0</span>
+          </div>
+          <div class="team-card power">
+            <span class="team-name">⚡ Team Renewables</span>
+            <span class="team-count" id="powerCount">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      &copy; 2025 Intel •
+      <a
+        href="https://www.intel.com/content/www/us/en/corporate-responsibility/2030-goals.html"
+        class="footer-link"
+        >Sustainability Goals</a
+      >
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+</html>
+</html>
 </html>
